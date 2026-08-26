@@ -646,7 +646,7 @@ class GeneratedQuestionCandidate(BaseModel):
 
 class AIGenerateSimilarResponse(BaseModel):
     items: list[GeneratedQuestionCandidate]
-    used_openai: bool
+    used_ai: bool
 
 
 class StudyReportRequest(BaseModel):
@@ -656,4 +656,4 @@ class StudyReportRequest(BaseModel):
 
 class StudyReportResponse(BaseModel):
     report: str
-    used_openai: bool
+    used_ai: bool

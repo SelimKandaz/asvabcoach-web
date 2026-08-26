@@ -18,9 +18,10 @@ class Settings(BaseSettings):
         default="postgresql+psycopg2://asvabcoach:change_me@postgres:5432/asvabcoach",
         alias="DATABASE_URL",
     )
-    openai_api_key: str = Field(default="", alias="OPENAI_API_KEY")
-    openai_enabled: bool = Field(default=False, alias="OPENAI_ENABLED")
-    openai_model: str = Field(default="gpt-4.1-mini", alias="OPENAI_MODEL")
+    ai_enabled: bool = Field(default=False, alias="AI_ENABLED")
+    ai_api_key: str = Field(default="", alias="AI_API_KEY")
+    ai_base_url: str = Field(default="http://host.docker.internal:1234/v1", alias="AI_BASE_URL")
+    ai_model: str = Field(default="local-model", alias="AI_MODEL")
     cors_origins: str = Field(
         default="http://localhost:5173,http://127.0.0.1:5173",
         alias="CORS_ORIGINS",
@@ -53,8 +54,8 @@ class Settings(BaseSettings):
         return self.data_dir / "question_assets"
 
     @property
-    def openai_available(self) -> bool:
-        return self.openai_enabled and bool(self.openai_api_key.strip())
+    def ai_available(self) -> bool:
+        return self.ai_enabled and bool(self.ai_base_url.strip())
 
 
 @lru_cache

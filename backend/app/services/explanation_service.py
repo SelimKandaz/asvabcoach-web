@@ -7,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models import AIExplanationCache, Question
-from app.services.openai_service import OpenAIService
+from app.services.ai_service import AIService
 
 
 def build_local_explanation(question: Question, selected_answer: str | None = None) -> dict:
@@ -42,9 +42,9 @@ def get_or_create_ai_explanation(
     if cached:
         return cached.payload, True
 
-    openai_service = OpenAIService()
+    ai_service = AIService()
     fallback = build_local_explanation(question, selected_answer)
-    if not openai_service.enabled:
+    if not ai_service.enabled:
         return fallback, False
 
     payload = {
@@ -60,7 +60,7 @@ def get_or_create_ai_explanation(
         "base_explanation": question.base_explanation,
         "user_language": user_language,
     }
-    ai_payload = openai_service.explain_question(payload) or fallback
+    ai_payload = ai_service.explain_question(payload) or fallback
     cache_entry = AIExplanationCache(
         id=f"aic_{uuid4().hex[:12]}",
         cache_key=cache_key,
@@ -72,4 +72,3 @@ def get_or_create_ai_explanation(
     db.add(cache_entry)
     db.commit()
     return ai_payload, False
-

@@ -21,9 +21,10 @@ services:
       - .env
     environment:
       DATABASE_URL: ${DATABASE_URL}
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      OPENAI_ENABLED: ${OPENAI_ENABLED}
-      OPENAI_MODEL: ${OPENAI_MODEL}
+      AI_ENABLED: ${AI_ENABLED:-false}
+      AI_API_KEY: ${AI_API_KEY:-}
+      AI_BASE_URL: ${AI_BASE_URL:-http://host.docker.internal:1234/v1}
+      AI_MODEL: ${AI_MODEL:-local-model}
       CORS_ORIGINS: ${CORS_ORIGINS}
     ports:
       - "${BACKEND_PORT:-8000}:8000"

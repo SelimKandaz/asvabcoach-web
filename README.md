@@ -1,6 +1,6 @@
 # ASVAB Coach
 
-ASVAB Coach is a browser-first ASVAB-style study and simulation platform with deterministic scoring, adaptive practice sessions, approximate AFQT and GT-style reporting, and optional OpenAI-powered learning support.
+ASVAB Coach is a browser-first ASVAB-style study and simulation platform with deterministic scoring, adaptive practice sessions, approximate AFQT and GT-style reporting, and optional AI-assisted learning support.
 
 ## What is included
 
@@ -8,7 +8,7 @@ ASVAB Coach is a browser-first ASVAB-style study and simulation platform with de
 - React + Vite frontend with study, quiz, CAT, AFQT, review, and admin flows
 - PostgreSQL and Docker Compose for local development and Linux deployment
 - XLSX, CSV, and JSON import pipeline for the existing question bank
-- Optional OpenAI endpoints for richer explanations and similar practice questions
+- Optional AI provider endpoints for richer explanations and similar practice questions
 
 ## Included data
 
@@ -62,22 +62,24 @@ Then run:
 docker compose exec backend python -m app.data_import.import_questions /host-downloads/asvab_style_question_database_v0_1.xlsx
 ```
 
-## Enable OpenAI
+## Optional AI provider
 
-1. Put the API key in `.env`:
+The app works with its built-in explanations by default. For richer explanations, similar questions, and study reports, you can connect a local AI server or a hosted provider with a compatible chat endpoint. Put the provider settings in `.env`:
 
 ```env
-OPENAI_API_KEY=your_key_here
-OPENAI_ENABLED=true
+AI_ENABLED=true
+AI_API_KEY=your_api_key_here
+AI_BASE_URL=http://host.docker.internal:1234/v1
+AI_MODEL=local-model
 ```
 
-2. Restart the backend:
+For a local provider that does not require a key, leave `AI_API_KEY` empty. For a hosted provider, set its API key and base URL there. Then restart the backend:
 
 ```bash
 docker compose up -d --build backend
 ```
 
-The app still runs without OpenAI. AI endpoints return graceful fallback content when the feature is disabled.
+The app still runs without an external provider. AI endpoints return graceful fallback content when the feature is disabled or unavailable.
 
 ## Access the app
 
@@ -112,4 +114,4 @@ docker run --rm \
 - The app does not claim official ASVAB scores.
 - Results are labeled as estimated practice metrics.
 - Scoring is deterministic and owned by the backend.
-- OpenAI is optional and never used for grading or official score claims.
+- External AI assistance is optional and never used for grading or official score claims.
